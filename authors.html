@@ -1,0 +1,176 @@
+<html>
+    <head>
+        <title>Parsely Top Performers</title>
+        <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="authors.css" rel="stylesheet">
+		<script src="http://codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.js'></script>
+		<script src="http://d3js.org/d3.v3.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src='creds.js'></script>
+    </head>
+	<style type="text/css">
+ 
+ body {
+	font: 12px sans-serif;
+	margin-left:50px;
+	}
+
+.hit {display:none;}
+
+#div2 {height: 55px;
+        margin: 10px;
+        font-size: 18px;	
+		text-align:right;
+		text-indent:-5px;
+        color: #fff;
+        padding: 10px;
+        background-color:#6baed6;
+        font-family: sans-serif;
+        border-style:solid;
+        border-width:0px;
+ }
+ 
+.slice text {
+ font-size: 14pt;
+ font-family: sans-serif;
+ }   
+
+.bar rect {
+  fill: #6baed6;
+}
+
+.bar rect:hover {
+  fill: #9ecae1;
+}
+
+.bar text.value {
+  fill: white;
+  font-size:20px;
+}
+
+.axis {
+  shape-rendering: crispEdges;
+}
+
+.axis path {
+  fill: none;
+}
+
+.x.axis line {
+  stroke: #fff;
+  stroke-opacity: .8;
+}
+
+.y.axis path {
+  stroke: white;
+}
+  </style>
+		
+    <body onload="">
+      <script>
+
+	  // Parse.ly code forked from Parse.ly API example crazycards: https://github.com/Parsely/api-examples/tree/master/crazycards
+	  // Thanks to Parse.ly's Garrett Wilkin for help 
+	  
+		var baseUrl = 'http://api.parsely.com/v2/';
+
+        function buildUrl(base, endpoint, params) {
+          var url = base + endpoint + "?" + $.param(params);
+          url += "&callback=?";
+          return url;
+        }
+
+        function callback(data, statusCode) {
+          if (data != undefined) {
+            $.each(data.data, function(i, datum) {
+              //TODO: Generate snazzy looking list of posts ranked by page views.
+              var postsDiv = $("#posts");
+              postsDiv.html("");
+              postsDiv.html("");
+			               $.each(data.data, function(i, datum) {
+	
+                  	console.log(datum);
+                  var num = i + 1;
+                  var rank = "<div class='rank'>"+num+"</div>"
+                      thumb = "<a class='thumbnail' href='"+datum.url+"'><img src='dummy.jpg'></a>",
+                      hits = "<div class='hit' style=''>hits: "+datum._hits+"</div>",
+                      title = "<div class='media-body'><h4>" + datum.author + "</h4></div>",
+                      words = "<div class='words'><h4>"+title+hits+"</h4></div";
+                  postsDiv.append("<div class='card'>"+rank+thumb+words+"</div>");
+              });
+            });
+          } else {
+            console.log("No API results");
+          }
+        }
+
+        function getPosts(key, secret, limit) {
+          var now = moment();
+          day = now.format('YYYY-MM-DD');
+          params = { apikey: key,
+            secret: secret,
+            limit: limit };
+          apiUrl = buildUrl(baseUrl, 'analytics/authors', params);
+          $.getJSON(apiUrl, callback);
+        }
+
+        var apikey = creds.API_KEY;
+        var secret = creds.API_SECRET;;
+
+        getPosts(apikey, secret, '5');
+
+      </script>
+
+	  <h1>My analytics</h1>
+          <p class="lead">Using Parse.ly</p> 
+		  <p class="lead">Top Authors (last 72 hours)<br />www.greentechmedia.com<br /><a href="index.html">See top stories</a></p></p>
+		  
+  <div id="div2" style="width: 0px;"></div>
+  <div id="div2" style="width: 0px;"></div>
+  <div id="div2" style="width: 0px;"></div>
+  <div id="div2" style="width: 0px;"></div> 
+  <div id="div2" style="width: 0px;"></div>
+  
+	<script type="text/javascript">
+	
+	// these could be dynamically pulled from the parse.ly API 
+	
+	var dataset = [{"name": "Eric Wesoff", "number": 9804}, {"name": "Katherine Tweed", "number": 5497},  {"name": "Jeff St. John", "number": 4201},  
+				 {"name": "Stephen Lacey", "number": 4095}, {"name": "Bentham Paulos", "number": 2721}]
+	
+    var graph = d3.selectAll("div")
+     .data(dataset)
+	 .transition().delay(function(d, i) { return 400*i; })
+     .style("width", function(d) { var barLength = d.number * 0.08; return barLength + "px"; })
+     .text(function(d) { return d.name + " " + d.number + " hits";})
+	 ;
+		
+	</script>	
+	 
+	
+	 </script> 
+      <div class="container">
+        <div class="page header">
+           
+          </p>
+        </div>
+		
+		
+        <!-- page header-->
+        <div class="row"> <!-- row  -->
+        </div> <!-- row  -->
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
+              <div id="histogram">
+              </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12" id="posts">
+          </div>
+        </div>
+      </div> <!-- class="container" -->
+    </body>
+</html>

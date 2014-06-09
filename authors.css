@@ -1,0 +1,33 @@
+#div
+{
+}
+
+.card
+{
+  height: 330px;
+  width: 170px;
+  float: left;
+  
+  border: 0px solid #111;
+}
+.rank
+{
+  font-size: 2em;
+  float: left;
+  padding-right: 10px;
+  border: 0px;
+}
+
+hr {border-top:0px;}
+
+.hits
+{
+}
+
+.image
+{
+}
+
+.title
+{
+}
